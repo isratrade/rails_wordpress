@@ -7,6 +7,7 @@
 # +------------------+---------------------+------+-----+---------+-------+
 module Wordpress
   class Relationship < ActiveRecord::Base
+    establish_connection(ENV['WPE_DB_URL'])
     self.table_name = "wp_term_relationships"
     self.primary_key = nil
     after_save :increment_term_use_count

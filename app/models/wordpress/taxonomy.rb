@@ -10,6 +10,7 @@
 # +------------------+---------------------+------+-----+---------+----------------+
 module Wordpress
   class Taxonomy < ActiveRecord::Base
+    establish_connection(ENV['WPE_DB_URL'])
     self.table_name = "wp_term_taxonomy"
     self.primary_key = "term_taxonomy_id"
     self.inheritance_column = 'taxonomy'
@@ -28,12 +29,12 @@ module Wordpress
     has_many :posts, through: :relationships
     has_many :categories, through: :relationships
     has_many :tags, through: :relationships
-    
-    has_one :parent_node, 
-      class_name: "Taxonomy", 
-      primary_key: :parent, 
+
+    has_one :parent_node,
+      class_name: "Taxonomy",
+      primary_key: :parent,
       foreign_key: :term_taxonomy_id
-      
+
     has_one :term, foreign_key: "term_id", primary_key: :term_id
 
     scope :for_cloud, -> { includes(:term).order("count desc").limit(40) }
